@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+import Post from "./Post";
 
 // schema = {
 //     [{
@@ -44,6 +45,14 @@ export default function MainPage() {
       return [...oldUsers];
     });
     setPostContent("");
+  };
+
+  const handleDelete = (postObject) => {
+    setActiveUser((oldUser) => {
+      const userPosts = oldUser.posts.filter((obj) => obj !== postObject);
+      oldUser.posts = userPosts;
+      return { ...oldUser };
+    });
   };
 
   useEffect(() => {
@@ -130,11 +139,15 @@ export default function MainPage() {
             <div>
               {users.length > 0 &&
                 activeUser.posts.length > 0 &&
-                activeUser.posts.toReversed().map((c) => (
-                  <div style={myCenterPad} key={c.id}>
-                    {c.content}
-                  </div>
-                ))}
+                activeUser.posts
+                  .toReversed()
+                  .map((c) => (
+                    <Post
+                      postObject={c}
+                      handleDelete={handleDelete}
+                      styleStuff={myCenterPad}
+                    />
+                  ))}
             </div>
           </div>
         </div>
